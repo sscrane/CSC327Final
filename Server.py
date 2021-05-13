@@ -7,10 +7,11 @@ host = "127.0.0.1"
 port = 8000
 s.bind((host, port))
 s.listen()
+client, address = s.accept()
+print("%s accepted at %s" % (client, address))
 
 while True:
-    client, address = s.accept()
-    print("%s accepted at %s" % (client, address))
+
     message = client.recv(1024)
     print(message.decode())
     #time.sleep(10)
