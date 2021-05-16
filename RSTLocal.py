@@ -35,12 +35,13 @@ def sendRST(dst_ip, dst_port, src_ip, src_port, ack, window):
 
 def sniffPackets(DST_IP):
     print("Sniffing for packets sent to: %s" % DST_IP)
-    p = sniff(filter="host "+DST_IP, prn=logRST, count=10, iface="en0")
+    p = sniff(lfilter="host 127.0.0.1", prn=logRST, count=10, iface='lo0')
+    #p = sniff(filter="host "+DST_IP, prn=logRST, count=10, iface="en0")
 
 def main():
 
-    #sniffPackets("127.0.0.1")
-    sniffPackets("131.229.72.7")
+    sniffPackets("127.0.0.1")
+    # sniffPackets("131.229.72.7")
 
 
 if __name__ == '__main__':

